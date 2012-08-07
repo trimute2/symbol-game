@@ -61,8 +61,10 @@ function easterEgg(){
 			}
 		}
 		function jump(){
+			if(!jumping && !falling){
 			data.jumping = true;
 
+			}
 		}
 		function moveBy(x,y){
 			var row, col,
@@ -81,7 +83,7 @@ function easterEgg(){
 
 
 			if(k.isDown('up')){
-
+				
 			}
 
 			if (k.isDown('left')) {
@@ -155,11 +157,11 @@ function easterEgg(){
 	    			stickMan.stopWalk();
 	    		}
 	    	}
-	    	'39':{
+	    	'38':{
 	    		allowEvent: true,
 
-	    		up: function(){
-
+	    		down: function(){
+	    			stickMan.jump();
 	    		}
 	    	}
 
@@ -208,4 +210,26 @@ function easterEgg(){
 function init(){
 	objects.KeyBoardMonitor = new KeyBoardMonitor
 	objects.KeyBoardMonitor.init();
+}
+function gameLoop(){
+	//these coulod be used to activate walking animation and delay gravity while jumping
+	/*css{
+	'phase0': ''
+	'phase1': 'phase1'
+	'phase2': 'phase2'
+	'phase3': 'phase3'
+	'phase4': 'phase4'
+	}*/
+	data = {
+		frameTimer: null,
+		frameIntervals: 50;
+	}
+	events= {
+		loop: function(){
+			game.objects.StickMan.animate();
+		}
+		startFrames: function(){
+			data.frameIntervals = window.setInterval(events.loop, data.frameIntervals);
+		}
+	}
 }
