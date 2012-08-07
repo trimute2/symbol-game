@@ -22,14 +22,16 @@ function easterEgg(){
 	}
 	function StickMan(X ,Y){
 		var data{
-		x: X;
-		y: Y;
-		falling: false;
-		jumping: false;
-		walking: false;
+		x: X,
+		y: Y,
+		collison: true,
+		falling: false,
+		jumping: false,
+		walking: false,
+		jumpPhase: 0,
 		direction{
-			left: true;
-			right: false;
+			left: true,
+			right: false
 		};
 		};
 		function moveTo(x, y){
@@ -60,11 +62,35 @@ function easterEgg(){
 				addDirection('left','right')
 			}
 		}
+		function gravity(){
+			if (!collison) {
+				if(!jumping){
+					return 1;
+				}else{
+					jumpPhase--
+					if (jumpPhase === 0) {
+						jumping = false;
+					};
+					return -1;
+				}
+			};
+		}
 		function jump(){
 			if(!jumping && !falling){
 			data.jumping = true;
-
+			data.jumpPhase = 6;
 			}
+		}
+		function collisionCheck(){
+
+			intersects = game.objects.collision.checkGrid({
+          		x: data.x,
+          		y: data.y,
+          		w: data.w,
+          		h: data.h,
+          		includeNeighbours: true
+        	});
+
 		}
 		function moveBy(x,y){
 			var row, col,
@@ -81,17 +107,17 @@ function easterEgg(){
 			var x = 0;
 			var y = 0;
 
-
-			if(k.isDown('up')){
-				
-			}
-
 			if (k.isDown('left')) {
 				x = -1;
 			};
 			if (k.isDown('right')) {
 				x = 1;
 			};
+
+
+
+			y= gravity();
+
 
 		}
 	}
