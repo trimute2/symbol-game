@@ -20,10 +20,12 @@ function easterEgg(){
 	objects ={
 		KeyBoardMonitor: null
 	}
-	function StickMan(X ,Y){
+	function StickMan(X ,Y, W, H){
 		var data{
 		x: X,
 		y: Y,
+		w: W,
+		h: H,
 		collison: true,
 		falling: false,
 		jumping: false,
@@ -82,15 +84,13 @@ function easterEgg(){
 			}
 		}
 		function collisionCheck(){
-
-			intersects = game.objects.collision.checkGrid({
-          		x: data.x,
-          		y: data.y,
-          		w: data.w,
-          		h: data.h,
-          		includeNeighbours: true
-        	});
-
+			for (var i = Things.length - 1; i >= 0; i--) {
+				if (y+w === plat[i]) {
+					if(x+h === plat[i]|| x ===plat[i]){
+						collison = true;
+					}
+				}
+			}
 		}
 		function moveBy(x,y){
 			var row, col,
