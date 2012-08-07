@@ -1,4 +1,16 @@
 function easterEgg(){
+
+	var map = [[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+			   [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+			   [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+			   ['_','_','_',' ',' ',' ',' ',' ',' ',' ']
+			   [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+			   [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+			   [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+			   [' ',' ',' ',' ',' ',' ','_','_','_',' ']
+			   [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+			   [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+			   ['_','_','_','_','_','_','_','_','_','_']]
 	var game,
 	      data,
 	      dom,
@@ -19,6 +31,19 @@ function easterEgg(){
 	}
 	objects ={
 		KeyBoardMonitor: null
+		platforms
+	}
+	function platform(map){
+		data ={
+			platform [][]
+		}
+		for (var h = 0; h <= 10; h++) {
+			for (var w = 0; w >= 9; w++) {
+				if(map[h][w] === '_'){
+					platform[] += [w*5,h*5]
+				}
+			};
+		};
 	}
 	function StickMan(X ,Y, W, H){
 		var data{
@@ -86,7 +111,7 @@ function easterEgg(){
 		function collisionCheck(){
 			for (var i = Things.length - 1; i >= 0; i--) {
 				if (y+w === plat[i]) {
-					if(x+h === plat[i]|| x ===plat[i]){
+					if(x+h >= plat[i]|| x <=plat[i]){
 						collison = true;
 					}
 				}
@@ -235,12 +260,13 @@ function easterEgg(){
 }
 function init(){
 	objects.KeyBoardMonitor = new KeyBoardMonitor
-	objects.KeyBoardMonitor.init();
+	objects.KeyBoardMonitor.init(),
+	objects.platforms = new platform(map);
 }
 function gameLoop(){
 	//these coulod be used to activate walking animation and delay gravity while jumping
 	/*css{
-	'phase0': ''
+	'phase0': ' '
 	'phase1': 'phase1'
 	'phase2': 'phase2'
 	'phase3': 'phase3'
