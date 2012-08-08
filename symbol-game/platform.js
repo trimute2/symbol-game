@@ -1,25 +1,22 @@
-var mapn = [[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-				[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-				[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-				['_','_','_',' ',' ',' ',' ',' ',' ',' '],
-				[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-				[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-				[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-				[' ',' ',' ',' ',' ',' ','_','_','_',' '],
-				[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-				[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-				['_','_','_','_','_','_','_','_','_','_']];
+
 function platform(map){
 	this.platforms = [];
-	this.pos = 0;
-	for (var h = 0; h <= 10; h++) {
-		for (var w = 0; w <= 9; w++) {
+	var length = map.length -1;
+	var lp = null;
+	for (var h = 0; h <= length; h++) {
+		for (var w = 0; w <= map[h].length-1; w++) {
 			if(map[h][w] === '_'){
-				this.platforms[this.pos] = [w*5,h*5];
-				this.pos++;
+				if(lp === null){
+					this.platforms.push({"x":w*5, "y":h*5, "h":1, "w":1});
+					lp = {"x":w*5, "y":h*5, "h":1, "w":1};
+				}else{
+					lp = {"x":w*5, "y":h*5, "h":1, "w": lp.w+1};
+
+				}
+			}else{
+				lp = null;
 			}
 		}
 	}
 	return this.platforms;
 }
-var platformMap = new platform(mapn);

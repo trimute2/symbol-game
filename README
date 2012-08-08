@@ -6,4 +6,4 @@ commit4: simple collision (refrences to platformers are made but they have not b
 commit5: platforms should work now all that needs to be done is put in graphics(colored sqaures for the time being) to have a visual for TESTING SCIENCE COMMENCE
 commit6: jasmin and html file added for testing
 commit7: do to terrible coding seprating parts of the game testing for bugs and re writing extra files added
-
+commit8: better platforms and seprate test files (now for a LIMITED TIME ONLY comes with more fixed code)
