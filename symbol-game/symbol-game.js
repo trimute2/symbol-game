@@ -1,6 +1,4 @@
-var Game ={
-};
-window.easterEgg = function(){
+function easterEgg(){
 
 	var map = [[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
 				[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
@@ -22,13 +20,13 @@ window.easterEgg = function(){
 			world_cols : 0,
 			world_rows :0
 		};
-		var game = {
-			data: data,
-			objects: objects
-		};
-		var objects={
+		// this.game = {
+		// 	data: data,
+		// 	objects: objects
+		// };
+	var objects={
 			KeyBoardMonitor: null,
-			platforms : []
+			platforms: []
 		};
 
 	function platform(map){
@@ -154,7 +152,7 @@ window.easterEgg = function(){
 		},
 		events = {
 			KeyDown: function(e){
-				if(keys[e.Keycode]&&keys[e.Keycode].down){ 
+				if(keys[e.Keycode]&&keys[e.Keycode].down){
 					if (typeof downKeys[e.keyCode] === 'undefined') {
 						downKeys[e.keyCode] = true;
 						keys[e.keyCode].down(e);
@@ -218,7 +216,7 @@ window.easterEgg = function(){
 		function attachEvents() {
 			utils.events.add(document, 'keydown', events.keydown);
 			utils.events.add(document, 'keyup', events.keyup);
-		}   
+		}
 		function init() {
 			attachEvents();
 		}
@@ -228,7 +226,7 @@ window.easterEgg = function(){
 			releaseAll: releaseAll
 		};
 	}
-	function init(){
+	this.init =function(){
 		objects.KeyBoardMonitor = new KeyBoardMonitor();
 		objects.KeyBoardMonitor.init(),
 		objects.platforms = new platform(map);
@@ -255,10 +253,8 @@ window.easterEgg = function(){
 			}
 		};
 	}
-	return game.objects.platforms;
-};
-
-function start(){
-	Game = new easterEgg();
-	Game.init();
+	// return objects.platforms;
 }
+
+var game = new easterEgg();
+game.init();
