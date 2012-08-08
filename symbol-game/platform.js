@@ -7,15 +7,20 @@ function platform(map){
 		for (var w = 0; w <= map[h].length-1; w++) {
 			if(map[h][w] === '_'){
 				if(lp === null){
-					this.platforms.push({"x":w*5, "y":h*5, "h":1, "w":1});
-					lp = {"x":w*5, "y":h*5, "h":1, "w":1};
+					lp = {"x":w*5, "y":h*5, "h":1, "w":5};
 				}else{
-					lp = {"x":w*5, "y":h*5, "h":1, "w": lp.w+1};
-
+					lp.w += 5;
 				}
 			}else{
-				lp = null;
+				if(lp !== null){
+					this.platforms.push(lp);
+					lp=null;
+				}
 			}
+		}
+		if(lp !== null){
+			this.platforms.push(lp);
+			lp=null;
 		}
 	}
 	return this.platforms;
