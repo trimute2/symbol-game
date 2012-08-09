@@ -50,16 +50,19 @@ function game(){
 			}
 		};
 		this.gravity = function(){
-			if (!collison) {
-				if(!jumping){
+			if (!this.collison) {
+				if(!this.jumping){
+					this.falling = true;
 					return 1;
+					
 				}else{
-					jumpPhase--;
-					if (jumpPhase === 0) {
+					this.jumpPhase--;
+					if (this.jumpPhase === 0) {
 						jumping = false;
 					}
 					return -1;
 				}
+				this.falling=false;
 			}
 		};
 		this.jump = function(){
@@ -123,20 +126,21 @@ function game(){
 		}
 		return this.platforms;
 	}
-	this.collision = function(itemOne, itemTwo){
+	function Collision(itemOne, itemTwo){
 		for (var area in itemTwo) {
-			if (itemOne.x + itemOne.w <= itemTwo[area].x + itemTwo[area].w && itemOne.x >= itemTwo[area].x && itemOne.y + itemOne.h < itemTwo[area].y + itemTwo[area].h && itemOne.y <= itemTwo[area].y) {
+			if (itemOne.x + itemOne.w <= itemTwo[area].x + itemTwo[area].w && itemOne.x >= itemTwo[area].x && itemOne.y + itemOne.h > itemTwo[area].y + itemTwo[area].h && itemOne.y <= itemTwo[area].y) {
 				return true;
 			}
 		}
 		return false;
-	};
+	}
 	this.init = function(){
 		ground = new platform(map_data);
-		this.man = new StickMan(30, 30, 5, 10);
+		this.man = new StickMan(30, 10, 5, 10);
 	};
 	this.gameloop = function(){
-		return collision(this.man, ground);
+		this.man.collison = Collision(this.man, ground);
+		this.man.gravity();
 	};
 	return this;
 }
