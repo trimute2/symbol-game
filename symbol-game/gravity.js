@@ -140,11 +140,36 @@ function Game(){
 		}
 		return false;
 	}
+	function CornerCollision(itemOne, itemTwo){
+		for (var area in itemTwo) {
+			if ((itemOne.x + itemOne.w > itemTwo[area].x ) &&
+				(itemOne.x < itemTwo[area].x) &&
+				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
+				(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
+				if(itemOne.x + itemOne.w -itemTwo[area].x > 2){
+					return 3;
+				}else{
+					return -3;
+				}
+			}else if ((itemOne.x + itemOne.w > itemTwo[area].x +itemTwo[area].w) &&
+				(itemOne.x < itemTwo[area].x + itemTwo[area].w ) &&
+				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
+				(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
+				if(itemTwo[area].x + itemTwo[area].w - itemOne.x > 2){
+					return -3;
+				}else{
+					return 3;
+				}
+			}
+		}
+		return 0;
+	}
 	this.init = function(){
 		ground = new platform(map_data);
-		this.man = new StickMan(30, 24, 5, 10);
+		/* have you seen*/this.man = new StickMan(29, 24, 5, 10);
 	};
 	this.gameloop = function(){
+		this.man.x += CornerCollision(this.man, ground);
 		this.man.collison = Collision(this.man, ground);
 		this.man.gravity();
 	};
