@@ -1,12 +1,14 @@
-LOG:
-commit1: null
-commit2: this commit is not complete thought it whould be good to update though
-commit3: trying to get this to a testable state begining of jumping and collision (More jump less colision)
-commit4: simple collision (refrences to platformers are made but they have not been added yet)
-commit5: platforms should work now all that needs to be done is put in graphics(colored sqaures for the time being) to have a visual for TESTING SCIENCE COMMENCE
-commit6: jasmin and html file added for testing
-commit7: do to terrible coding seprating parts of the game testing for bugs and re writing extra files added
-commit8: better platforms and seprate test files (now for a LIMITED TIME ONLY comes with more fixed code)
-commit9: even better platforms and begining of collision
-commit10: collisions is now complete and so is its test
-commit11: grcaught a glitch in collision and  beginings of gravity (can check weather or not the player is grounded)
+# Symbol Game
+*********
+This is a game that i am working on for an internship
+
+- the game curently has
++ the player
+* platforms
+* collision
+* gravity
+- the game needs
++ controls
+* main Puzze mechanic
+* graphics
+* a **complete** game loop
