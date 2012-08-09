@@ -1,4 +1,4 @@
-function game(){
+function Game(){
 	this.man=null;
 	var ground;
 	var map_data = [[' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
@@ -53,15 +53,18 @@ function game(){
 			if (!this.collison) {
 				if(!this.jumping){
 					this.falling = true;
-					return 1;
+					this.y +=1;
+					return null;
 					
 				}else{
 					this.jumpPhase--;
 					if (this.jumpPhase === 0) {
 						jumping = false;
 					}
-					return -1;
+					this.y -=1;
+					return null;
 				}
+			}else{
 				this.falling=false;
 			}
 		};
@@ -128,7 +131,10 @@ function game(){
 	}
 	function Collision(itemOne, itemTwo){
 		for (var area in itemTwo) {
-			if (itemOne.x + itemOne.w <= itemTwo[area].x + itemTwo[area].w && itemOne.x >= itemTwo[area].x && itemOne.y + itemOne.h > itemTwo[area].y + itemTwo[area].h && itemOne.y <= itemTwo[area].y) {
+			if ((itemOne.x + itemOne.w <= itemTwo[area].x + itemTwo[area].w) &&
+				(itemOne.x >= itemTwo[area].x) &&
+				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
+				(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
 				return true;
 			}
 		}
@@ -136,7 +142,7 @@ function game(){
 	}
 	this.init = function(){
 		ground = new platform(map_data);
-		this.man = new StickMan(30, 10, 5, 10);
+		this.man = new StickMan(30, 24, 5, 10);
 	};
 	this.gameloop = function(){
 		this.man.collison = Collision(this.man, ground);
@@ -144,5 +150,4 @@ function game(){
 	};
 	return this;
 }
-var Game = new game();
-Game.init();
+
