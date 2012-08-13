@@ -7,9 +7,10 @@ This is a game that i am working on for an internship
 	* platforms
 	* collision
 	* gravity
-	* platform edges 
+	* platform edges
+	*graphics 
 - the game needs
 	+ controls
 	* main Puzze mechanic
-	* graphics
+	* better graphics
 	* a **complete** game loop
