@@ -8,7 +8,7 @@ This is a game that i am working on for an internship
 	* collision
 	* gravity
 	* platform edges
-	*graphics 
+	* graphics 
 - the game needs
 	+ controls
 	* main Puzze mechanic
