@@ -27,6 +27,11 @@ body {
 	border: 1px solid #000bac;
 	background-color: #bfc4fe;
 }
+.symbolMain{
+	position: absolute;
+	border: 1px solid #b00;
+	background-color: #e00;
+}
 .StickMan.walking{
 
 }

@@ -10,7 +10,8 @@ This is a game that i am working on for an internship
 	* platform edges
 	* graphics
 	* controles with jumping
+	* beggining of puzzle element
 - the game needs
-	+ main Puzze mechanic
+	+ puzzle elment that does something
 	* better graphics
 	* a **complete** game loop
