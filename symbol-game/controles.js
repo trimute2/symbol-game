@@ -41,8 +41,9 @@ function Game(){
 					game.man.x -= 1;
 				} else if(e.keyCode === 39){
 					console.log("move right");
-					game.man.x += 0.5;
-				} else if(e.keyCode === 38){
+					game.man.x += 1;
+				}
+				if(e.keyCode === 38){
 					console.log("jump");
 					game.man.jump();
 				}
@@ -136,28 +137,48 @@ function Game(){
 					return null;
 					
 				}else{
-					this.jumpPhase--;
-					if (this.jumpPhase === 0) {
-						jumping = false;
+					if(this.jumping){
+					if (this.jumpPhase <= 0) {
+						this.jumping = false;
+						this.jumpPhase=0;
+						this.falling = true;
+						return null;
 					}
-					this.y -=0.5;
+					this.jumpPhase -= 1;
+					console.log(this.jumpPhase);
+					this.y -= 1;
+					this.collison=false;
+				}
 					return null;
 				}
 			}else{
+				if(this.jumping){
+					if (this.jumpPhase <= 0) {
+						this.jumping = false;
+						this.jumpPhase=0;
+						this.falling = true;
+						return null;
+					}
+					this.jumpPhase -= 1;
+					console.log(this.jumpPhase);
+					this.y -= 1;
+					this.collison=false;
+				}
 				this.falling=false;
+				return null;
 			}
 		};
 		this.jump = function(){
 			if(!this.jumping && !this.falling){
 				this.jumping = true;
-				this.jumpPhase = 6;
+				this.jumpPhase = 20;
 			}
 		};
 		this.init = function(x,y){
 			this.element = document.createElement('div');
 			this.element.className = 'StickMan';
-			this.element.style.left = x*10+"px";
-			this.element.style.top= y*10+"px";
+			this.element.style.left = x*5+"px";
+			this.element.style.top= y*5+"px";
 			this.element.style.width = 33+"px";
 			this.element.style.height = 98+"px";
 			document.getElementById("gameWorld").appendChild(this.element);
@@ -232,6 +253,7 @@ function Game(){
 		return this.platforms;
 	}
 	function Collision(itemOne, itemTwo){
+
 		for (var area in itemTwo) {
 			if ((itemOne.x + itemOne.w <= itemTwo[area].x + itemTwo[area].w) &&
 				(itemOne.x >= itemTwo[area].x) &&
@@ -240,27 +262,35 @@ function Game(){
 				return true;
 			}
 		}
-		return false;
+		if (itemOne.falling === false){
+			var testItem = itemOne;
+			testItem.falling = true;
+			if(CornerCollision(testItem, itemTwo) !== 0){
+			return false;
+			}
+		}
 	}
 	function CornerCollision(itemOne, itemTwo){
-		for (var area in itemTwo) {
-			if ((itemOne.x + itemOne.w > itemTwo[area].x ) &&
-				(itemOne.x < itemTwo[area].x) &&
-				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
-				(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
-				if(itemOne.x + itemOne.w -itemTwo[area].x > 2){
-					return 3;
-				}else{
-					return -3;
-				}
-			}else if ((itemOne.x + itemOne.w > itemTwo[area].x +itemTwo[area].w) &&
-				(itemOne.x < itemTwo[area].x + itemTwo[area].w ) &&
-				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
-				(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
-				if(itemTwo[area].x + itemTwo[area].w - itemOne.x > 2){
-					return -3;
-				}else{
-					return 3;
+		if(itemOne.falling){
+			for (var area in itemTwo) {
+				if ((itemOne.x + itemOne.w > itemTwo[area].x ) &&
+					(itemOne.x < itemTwo[area].x) &&
+					((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
+					(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
+					if(itemOne.x + itemOne.w -itemTwo[area].x > 0.2){
+						return 0.3;
+					}else{
+						return -3;
+					}
+					}else if ((itemOne.x + itemOne.w > itemTwo[area].x +itemTwo[area].w) &&
+						(itemOne.x < itemTwo[area].x + itemTwo[area].w ) &&
+						((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
+						(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
+						if(itemTwo[area].x + itemTwo[area].w - itemOne.x > 0.2){
+						return 0.3;
+					}else{
+						return 0.3;
+					}
 				}
 			}
 		}
