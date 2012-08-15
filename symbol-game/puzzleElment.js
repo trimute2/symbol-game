@@ -2,6 +2,8 @@ function Game(){
 	this.man=null;
 	this.interval_id = null;
 	this.symbolOne= null;
+	this.symbolPartOne= null;
+	this.symbolPartOne= null;
 	var ground;
 	var map_data = [[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
 					[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
@@ -40,12 +42,12 @@ function Game(){
 					console.log("move left");
 					game.man.walk(-1);
 					this.moveLeft = true;
-					game.man.move_x = -0.5;
+					game.man.move_x = -5;
 					console.log(this.moveLeft);
 				} else if(e.keyCode === 39){
 					console.log("move right");
 					this.moveRight = true;
-					game.man.move_x = 0.5;
+					game.man.move_x = 5;
 				}
 				if(e.keyCode === 38){
 					console.log("jump");
@@ -110,8 +112,9 @@ function Game(){
 	function symbolMain(X,Y){
 		this.x = X;
 		this.y = Y;
-		this.w = 5;
-		this.h = 1.25;
+		this.w = 50;
+		this.h = 30;
+		this.parts = 0;
 		this.collision = true;
 		this.falling = false;
 		this.pushing={
@@ -123,8 +126,9 @@ function Game(){
 			// if(this.pushing === true){
 			// }
 			if (!this.collision) {
+				// console.log('no collision');
 					this.falling = true;
-					this.y +=1;
+					this.y +=5;
 					return null;
 				}
 		};
@@ -132,16 +136,68 @@ function Game(){
 		this.init = function(){
 			this.element = document.createElement('div');
 			this.element.className = 'symbolMain';
-			this.element.style.left = this.x*5+"px";
-			this.element.style.top= this.y*5+"px";
-			this.element.style.width = 45+"px";
-			this.element.style.height = 21+"px";
+			this.element.style.left = this.x+"px";
+			this.element.style.top= this.y+"px";
+			this.element.style.width = this.w+"px";
+			this.element.style.height = this.h+"px";
+			document.getElementById("gameWorld").appendChild(this.element);
+		};
+		this.animate = function(){
+			if(this.parts === 1){
+				this.element.className = 'symbolMain1';
+			}
+			if(this.parts === 2){
+				this.element.className = 'symbolMain2';
+			}
+			this.gravity();
+			this.element.style.top = this.y+"px";
+			this.element.style.left = this.x+"px";
+		};
+	}
+	function symbolPart(X,Y,Part){
+		this.x = X;
+		this.y = Y;
+		this.w = 25;
+		this.h = 30;
+		this.listed = false;
+		this.collision = true;
+		this.falling = false;
+		this.part = Part;
+		this.pushing={
+			right: false,
+			left: false
+		};
+
+		this.gravity = function(){
+			// if(this.pushing === true){
+			// }
+			if (!this.collision) {
+				// console.log('no collision');
+					this.falling = true;
+					this.y +=5;
+					return null;
+				}
+		};
+
+		this.init = function(){
+			this.element = document.createElement('div');
+			if(this.part===1){
+				this.element.className = 'symbolPartOne';
+			}
+			if(this.part===2){
+				this.element.className = 'symbolPartTwo';
+			}
+			this.element.style.left = this.x+"px";
+			this.element.style.top= this.y+"px";
+			this.element.style.width = this.w+"px";
+			this.element.style.height = this.h+"px";
 			document.getElementById("gameWorld").appendChild(this.element);
 		};
 		this.animate = function(){
 			this.gravity();
-			this.element.style.top = this.y*10+"px";
-			this.element.style.left = this.x*10+"px";
+
+			this.element.style.top = this.y+"px";
+			this.element.style.left = this.x+"px";
 		};
 	}
 	function StickMan(X ,Y, W, H){
@@ -186,7 +242,7 @@ function Game(){
 			if (!this.collison) {
 				if(!this.jumping){
 					this.falling = true;
-					this.y +=1;
+					this.y +=5;
 					return null;
 					
 				}else{
@@ -197,9 +253,9 @@ function Game(){
 						this.falling = true;
 						return null;
 					}
-					this.jumpPhase -= 1;
+					this.jumpPhase -= 5;
 					console.log(this.jumpPhase);
-					this.y -= 1;
+					this.y -= 5;
 					this.collison=false;
 				}
 					return null;
@@ -212,9 +268,9 @@ function Game(){
 						this.falling = true;
 						return null;
 					}
-					this.jumpPhase -= 1;
+					this.jumpPhase -= 5;
 					console.log(this.jumpPhase);
-					this.y -= 1;
+					this.y -= 5;
 					this.collison=false;
 				}
 				this.falling=false;
@@ -224,16 +280,16 @@ function Game(){
 		this.jump = function(){
 			if(!this.jumping && !this.falling){
 				this.jumping = true;
-				this.jumpPhase = 20;
+				this.jumpPhase = 200;
 			}
 		};
 		this.init = function(x,y){
 			this.element = document.createElement('div');
 			this.element.className = 'StickMan';
-			this.element.style.left = x*5+"px";
-			this.element.style.top= y*5+"px";
-			this.element.style.width = 33+"px";
-			this.element.style.height = 98+"px";
+			this.element.style.left = x+"px";
+			this.element.style.top= y+"px";
+			this.element.style.width = this.w+"px";
+			this.element.style.height = this.h+"px";
 			document.getElementById("gameWorld").appendChild(this.element);
 		};
 		/*function collisionCheck(){
@@ -259,11 +315,12 @@ function Game(){
 			// if(this.moveRight){
 			// 	this.x +=1 ;
 			// }
-			this.x += this.move_x;
-			console.log(this.moveLeft);
 			this.gravity();
-			this.element.style.top = this.y*10+"px";
-			this.element.style.left = this.x*10+"px";
+			this.x += this.move_x;
+			// console.log(this.moveLeft);
+			this.element.style.top = this.y+"px";
+			this.element.style.left = this.x+"px";
+
 		};
 		return this;
 	}
@@ -275,9 +332,9 @@ function Game(){
 			for (var w = 0; w <= map[h].length-1; w++) {
 				if(map[h][w] === '_'){
 					if(lp === null){
-						lp = {"x":w*5, "y":h*5, "h":1, "w":5};
+						lp = {"x":w*45, "y":h*50, "h":25, "w":60};
 					}else{
-						lp.w += 5;
+						lp.w += 60;
 					}
 				}else{
 					if(lp !== null){
@@ -286,11 +343,11 @@ function Game(){
 						platform = document.createElement('div');
 						platform.className = 'platform';
 						console.log(lp.x*10 );
-						platform.style.left = (lp.x*9 )+"px";
+						platform.style.left = lp.x+"px";
 						console.log(lp.y*10 );
-						platform.style.top= (lp.y*10 )+"px";
-						platform.style.width = (lp.w*12 -2)+"px";
-						platform.style.height = (lp.h*25 -2)+"px";
+						platform.style.top= lp.y+"px";
+						platform.style.width = lp.w+"px";
+						platform.style.height = lp.h+"px";
 						document.getElementById("gameWorld").appendChild(platform);
 						lp=null;
 					}
@@ -298,17 +355,17 @@ function Game(){
 			}
 			if(lp !== null){
 				this.platforms.push(lp);
-				console.log("creatin platform");
-				platform = document.createElement('div');
-				platform.className = 'platform';
-				console.log(lp.x*10 );
-				platform.style.left = (lp.x*9 )+"px";
-				console.log(lp.y*10 );
-				platform.style.top= (lp.y*10 )+"px";
-				platform.style.width = (lp.w*12 -2)+"px";
-				platform.style.height = (lp.h*25 -2)+"px";
-				document.getElementById("gameWorld").appendChild(platform);
-				lp=null;
+						console.log("creatin platform");
+						platform = document.createElement('div');
+						platform.className = 'platform';
+						console.log(lp.x*10 );
+						platform.style.left = lp.x+"px";
+						console.log(lp.y*10 );
+						platform.style.top= lp.y+"px";
+						platform.style.width = lp.w+"px";
+						platform.style.height = lp.h+"px";
+						document.getElementById("gameWorld").appendChild(platform);
+						lp=null;
 			}
 		}
 		return this.platforms;
@@ -316,27 +373,48 @@ function Game(){
 	function Collision(itemOne, itemTwo){
 
 		for (var area in itemTwo) {
-			if ((itemOne.x + itemOne.w <= itemTwo[area].x + itemTwo[area].w) &&
+			// console.log('itemOne: ',itemOne.x, itemOne.w, itemOne.y, itemOne.h);
+			if (((itemOne.x + itemOne.w) <= (itemTwo[area].x + itemTwo[area].w)) &&
 				(itemOne.x >= itemTwo[area].x) &&
-				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
-				(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
+				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y)&&
+				(itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
 				return true;
 			}
+		}
+	}
+	function CollisionParts(itemOne, itemTwo){
+			// console.log('itemOne: ',itemOne.x, itemOne.w, itemOne.y, itemOne.h);
+		if (((itemOne.x + itemOne.w) <= (itemTwo.x + itemTwo.w)) &&
+			(itemOne.x >= itemTwo.x) &&
+			((itemOne.y + itemOne.h <= (itemTwo.y + itemTwo.h) && (itemOne.y + itemOne.h) >= itemTwo.y)&&
+			(itemOne.y <= (itemTwo.y + itemTwo.h)))) {
+			return true;
 		}
 	}
 	function CornerCollision(itemOne, itemTwo){
 		for (var area in itemTwo) {
 			if ((itemOne.x + itemOne.w > itemTwo[area].x ) &&
 				(itemOne.x < itemTwo[area].x) &&
-				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
-				(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
+				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) &&
+				(itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
 					return true;
 				}else if ((itemOne.x + itemOne.w > itemTwo[area].x +itemTwo[area].w) &&
 					(itemOne.x < itemTwo[area].x + itemTwo[area].w ) &&
-					((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) ||
-					(itemOne.y >= itemTwo[area].y && itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
+					((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y) &&
+					(itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
 					return true;
 			}
+		}
+	}
+	function CornerCollisionParts(itemOne, itemTwo){
+		if ((itemOne.x + itemOne.w > itemTwo.x ) &&
+			(itemOne.x < itemTwo.x) &&
+			((itemOne.y + itemOne.h === (itemTwo.y + itemTwo.h) && (itemOne.y + itemOne.h) === itemTwo.y))) {
+				return true;
+			}else if ((itemOne.x + itemOne.w > itemTwo.x +itemTwo.w) &&
+				(itemOne.x < itemTwo.x + itemTwo.w ) &&
+				((itemOne.y + itemOne.h <= (itemTwo.y + itemTwo.h) && (itemOne.y + itemOne.h) >= itemTwo.y))) {
+				return true;
 		}
 	}
 	function listCollision(itemOne, itemTwo){
@@ -347,28 +425,92 @@ function Game(){
 		}
 		return true;
 	}
+	function listCollisionParts(itemOne, itemTwo){
+		if(!CollisionParts(itemOne,itemTwo)){
+			if (!CornerCollisionParts(itemOne,itemTwo)) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+	function pushing(itemOne, itemTwo){
+		if(((itemOne.y+itemOne.h) >= (itemTwo.y + itemTwo.h)) && (itemOne.y < itemTwo.y)){
+			if(((itemOne.x + itemOne.w) >= itemTwo.x) && (itemOne.x < itemTwo.x)){
+				return 5;
+			}
+		}
+		if(((itemOne.y+itemOne.h) >= (itemTwo.y + itemTwo.h)) && (itemOne.y < itemTwo.y)){
+			if((itemOne.x <= (itemTwo.x+itemTwo.w)) && ((itemOne.x + itemOne.w) > (itemTwo.x + itemTwo.w))){
+				return -5;
+			}
+		}
+		return 0;
+	}
 	this.init = function(x,y){
 		ground = new platform(map_data);
-		/* have you seen*/this.man = new StickMan(x, y, 7, 10);
+		/* have you seen*/this.man = new StickMan(x, y, 35, 100);
 		this.man.init(x,y);
-		this.symbolOne = new symbolMain(30, 0);
+		this.symbolOne = new symbolMain(300, 0);
+		this.symbolPartOne = new symbolPart(30, 0, 1);
+		this.symbolPartTwo = new symbolPart(550, 0, 2);
 		this.symbolOne.init();
+		this.symbolPartOne.init();
+		this.symbolPartTwo.init();
 		this.keyBoard = new KeyBoardMonitor();
 		document.body.onkeydown= this.keyBoard.events.KeyDown;
 		document.body.onkeyup= this.keyBoard.events.keyup;
-
+		console.log(ground);
 		// this.gameloop();
 	};
 	this.gameloop = function(){
 		game.man.collison = listCollision(game.man, ground);
+		if(game.symbolOne.collision){
+			if(listCollisionParts(game.man, game.symbolOne) === 1){
+				game.man.collision = true;
+			}
+		}
 		game.symbolOne.collision = listCollision(game.symbolOne, ground);
+		game.symbolPartOne.collision = listCollision(game.symbolPartOne, ground);
+		game.symbolPartTwo.collision = listCollision(game.symbolPartTwo, ground);
+		if (!game.symbolPartOne.listed) {
+			game.symbolOne.parts += listCollisionParts(game.symbolPartOne, game.symbolOne);
+			game.symbolPartOne.listed= true;
+		}
+		if (!game.symbolPartTwo.listed) {
+			game.symbolOne.parts += listCollisionParts(game.symbolPartTwo, game.symbolOne);
+			game.symbolPartTwo.listed = true;
+		}
+		if(game.symbolOne.collision){
+			if(listCollisionParts(game.symbolPartOne, game.symbolOne) === 1){
+				game.symbolPartOne.collision = true;
+			}
+		}
+		if(game.symbolOne.collision){
+			if(listCollisionParts(game.symbolPartTwo, game.symbolOne) === 1){
+				game.symbolPartTwo.collision = true;
+			}
+		}
+		
+		if(game.symbolOne.collision){
+			game.symbolOne.x += pushing(game.man ,game.symbolOne);
+		}
+		if(game.symbolPartOne.collision){
+			game.symbolPartOne.x += pushing(game.man ,game.symbolPartOne);
+		}
+		if(game.symbolPartTwo.collision){
+			game.symbolPartTwo.x += pushing(game.man ,game.symbolPartTwo);
+		}
 		game.man.animate();
 		game.symbolOne.animate();
-		if (false) {
-			window.clearInterval(this.interval_id);
-			this.interval_id = null;
-			// return null;
-		}
+		game.symbolPartOne.animate();
+		game.symbolPartTwo.animate();
+		// console.log('Loop: '+game.i);
+		// if (game.i>=100) {
+		// 	window.clearInterval(game.interval_id);
+		// 	this.interval_id = null;
+		// 	// return null;
+		// }
+		// game.i += 1;
 		// else{
 		// return this.gameloop();
 		// }
@@ -376,5 +518,6 @@ function Game(){
 	return this;
 }
 var game= new Game();
-game.init(20,0);
+game.init(200,0);
+game.i = 1;
 game.interval_id = window.setInterval(game.gameloop, 1000/60);

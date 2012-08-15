@@ -19,17 +19,37 @@ body {
 }
 .platform{
 	position: absolute;
-	border: 1px solid #a80;
+	/*border: -1px solid #a80;*/
 	background-color: #ca0;
 }
 .StickMan{
 	position: absolute;;
-	border: 1px solid #000bac;
+/*	border: 1px solid #000bac;*/
 	background-color: #bfc4fe;
 }
 .symbolMain{
 	position: absolute;
-	border: 1px solid #b00;
+	/*border: 1px solid #b00;*/
+	background-color: #e00;
+}
+.symbolMain1{
+	position: absolute;
+	/*border: 1px solid #b00;*/
+	background-color: #ca0;
+}
+.symbolMain2{
+	position: absolute;
+	/*border: 1px solid #b00;*/
+	background-color: #bfc4fe;
+}
+.symbolPartOne{
+	position: absolute;
+	/*border: 1px solid #b00;*/
+	background-color: #e00;
+}
+.symbolPartTwo{
+	position: absolute;
+	/*border: 1px solid #b00;*/
 	background-color: #e00;
 }
 .StickMan.walking{
