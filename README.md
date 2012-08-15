@@ -1,4 +1,4 @@
-# Symbol Game
+ Symbol Game
 *********
 This is a game that i am working on for an internship
 
@@ -12,6 +12,6 @@ This is a game that i am working on for an internship
 	* controles with jumping
 	* beggining of puzzle element
 - the game needs
-	+ puzzle elment that does something
+	+ puzzle elment that acivates the end off the level
 	* better graphics
 	* a **complete** game loop
