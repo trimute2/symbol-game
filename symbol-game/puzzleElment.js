@@ -113,7 +113,7 @@ function Game(){
 		this.x = X;
 		this.y = Y;
 		this.w = 50;
-		this.h = 30;
+		this.h = 25;
 		this.parts = 0;
 		this.collision = true;
 		this.falling = false;
@@ -158,7 +158,7 @@ function Game(){
 		this.x = X;
 		this.y = Y;
 		this.w = 25;
-		this.h = 30;
+		this.h = 25;
 		this.listed = false;
 		this.collision = true;
 		this.falling = false;
@@ -209,6 +209,7 @@ function Game(){
 		this.falling = false;
 		this.jumping = false;
 		this.walking = false;
+		this.jumpPower = 5;
 		this.jumpPhase = 0;
 		this.direction = {
 			left: true,
@@ -242,7 +243,10 @@ function Game(){
 			if (!this.collison) {
 				if(!this.jumping){
 					this.falling = true;
-					this.y +=5;
+					this.y += Math.floor(this.jumpPower);
+					if (this.jumpPower < 15) {
+						this.jumpPower += 0.5;
+					}
 					return null;
 					
 				}else{
@@ -251,13 +255,19 @@ function Game(){
 						this.jumping = false;
 						this.jumpPhase=0;
 						this.falling = true;
+						if (this.jumpPower < 15) {
+							this.jumpPower += 0.5;
+						}
 						return null;
 					}
 					this.jumpPhase -= 5;
 					console.log(this.jumpPhase);
-					this.y -= 5;
+					this.y += Math.floor(this.jumpPower);
 					this.collison=false;
 				}
+					if (this.jumpPower < 15) {
+						this.jumpPower += 0.5;
+					}
 					return null;
 				}
 			}else{
@@ -266,20 +276,34 @@ function Game(){
 						this.jumping = false;
 						this.jumpPhase=0;
 						this.falling = true;
+						if (this.jumpPower < 15) {
+							this.jumpPower += 0.5;
+						}
 						return null;
 					}
-					this.jumpPhase -= 5;
+					this.jumpPhase = 5;
 					console.log(this.jumpPhase);
-					this.y -= 5;
+					this.y += Math.floor(this.jumpPower);
 					this.collison=false;
+				}else{
+					// if (this.jumpPower > 7) {
+					// //this.y -=this.jumpPower;
+					// }
+					this.jumpPower=5;
 				}
 				this.falling=false;
+				if (this.jumpPower < 15) {
+					this.jumpPower += 0.5;
+				}
 				return null;
 			}
+			console.log(this.jumpPower);
+			
 		};
 		this.jump = function(){
 			if(!this.jumping && !this.falling){
 				this.jumping = true;
+				this.jumpPower= -15;
 				this.jumpPhase = 200;
 			}
 		};
@@ -376,8 +400,7 @@ function Game(){
 			// console.log('itemOne: ',itemOne.x, itemOne.w, itemOne.y, itemOne.h);
 			if (((itemOne.x + itemOne.w) <= (itemTwo[area].x + itemTwo[area].w)) &&
 				(itemOne.x >= itemTwo[area].x) &&
-				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y)&&
-				(itemOne.y <= (itemTwo[area].y + itemTwo[area].h)))) {
+				((itemOne.y + itemOne.h <= (itemTwo[area].y + itemTwo[area].h) && (itemOne.y + itemOne.h) >= itemTwo[area].y))) {
 				return true;
 			}
 		}
@@ -434,13 +457,13 @@ function Game(){
 		return 1;
 	}
 	function pushing(itemOne, itemTwo){
-		if(((itemOne.y+itemOne.h) >= (itemTwo.y + itemTwo.h)) && (itemOne.y < itemTwo.y)){
-			if(((itemOne.x + itemOne.w) >= itemTwo.x) && (itemOne.x < itemTwo.x)){
+		if(((itemOne.y+itemOne.h) >= (itemTwo.y + itemTwo.h)) && (itemOne.y <= itemTwo.y)){
+			if(((itemOne.x + itemOne.w) >= itemTwo.x) && (itemOne.x <= itemTwo.x)){
 				return 5;
 			}
 		}
-		if(((itemOne.y+itemOne.h) >= (itemTwo.y + itemTwo.h)) && (itemOne.y < itemTwo.y)){
-			if((itemOne.x <= (itemTwo.x+itemTwo.w)) && ((itemOne.x + itemOne.w) > (itemTwo.x + itemTwo.w))){
+		if(((itemOne.y+itemOne.h) >= (itemTwo.y + itemTwo.h)) && (itemOne.y <= itemTwo.y)){
+			if((itemOne.x <= (itemTwo.x+itemTwo.w)) && ((itemOne.x + itemOne.w) >= (itemTwo.x + itemTwo.w))){
 				return -5;
 			}
 		}
@@ -464,11 +487,6 @@ function Game(){
 	};
 	this.gameloop = function(){
 		game.man.collison = listCollision(game.man, ground);
-		if(game.symbolOne.collision){
-			if(listCollisionParts(game.man, game.symbolOne) === 1){
-				game.man.collision = true;
-			}
-		}
 		game.symbolOne.collision = listCollision(game.symbolOne, ground);
 		game.symbolPartOne.collision = listCollision(game.symbolPartOne, ground);
 		game.symbolPartTwo.collision = listCollision(game.symbolPartTwo, ground);
@@ -499,6 +517,14 @@ function Game(){
 		}
 		if(game.symbolPartTwo.collision){
 			game.symbolPartTwo.x += pushing(game.man ,game.symbolPartTwo);
+		}
+		if(game.symbolPartTwo.collision && game.symbolPartOne.collision){
+			console.log("yep");
+			if (pushing(game.symbolPartOne ,game.symbolPartTwo) === -5){
+				game.symbolPartTwo.x += -1;
+			}else if(pushing(game.symbolPartOne ,game.symbolPartTwo) === 5) {
+				game.symbolPartTwo.x += 1;
+			}
 		}
 		game.man.animate();
 		game.symbolOne.animate();
