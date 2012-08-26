@@ -16,6 +16,8 @@ This is a game that i am working on for an internship
 	* better graphics
 	* a **complete** game loop
 	* better symbolcollison
-sidenote:
+	* better platform generation
+
+-sidenote:
 sorry for not working on this in a while if you follow this
 (i only know of one person but still some may have started following in my absents) 

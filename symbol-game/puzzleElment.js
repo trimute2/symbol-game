@@ -5,6 +5,7 @@ function Game(){
 	this.symbolPartOne= null;
 	this.symbolPartOne= null;
 	var ground;
+	var worldLength;
 	var map_data = [[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
 					[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
 					[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
@@ -341,6 +342,9 @@ function Game(){
 			// }
 			this.gravity();
 			this.x += this.move_x;
+			if (worldLength < this.x+this.w) {
+				this.x += -5;
+			}
 			// console.log(this.moveLeft);
 			this.element.style.top = this.y+"px";
 			this.element.style.left = this.x+"px";
@@ -351,6 +355,7 @@ function Game(){
 	function platform(map){
 		this.platforms = [];
 		var length = map.length -1;
+		worldLength = length * 60;
 		var lp = null;
 		for (var h = 0; h <= length; h++) {
 			for (var w = 0; w <= map[h].length-1; w++) {
